@@ -74,6 +74,17 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
+        let poke: Pokemon!
+        
+        if InSearchModel{
+            poke = filteredPokemon[indexPath.row]
+        }else {
+            poke = pokemonArr[indexPath.row]
+        }
+        
+        performSegue(withIdentifier: "PokemonDetailVC", sender: poke)
+        
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -82,10 +93,10 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             
             if InSearchModel{
                 let pokemon = filteredPokemon[indexPath.row]
-                cell.configureCell(pokemon: pokemon)
+                cell.configureCell(pokemon)
             }else {
                 let pokemon = pokemonArr[indexPath.row]
-                cell.configureCell(pokemon: pokemon)
+                cell.configureCell(pokemon)
             }
             
             return cell
@@ -125,5 +136,14 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "PokemonDetailVC"{
+            if let detailsVC = segue.destination as? PokemonDetailVC{
+                if let pokemon = sender as? Pokemon{
+                    detailsVC.pokemon = pokemon
+                }
+            }
+        }
+    }
 }
 
